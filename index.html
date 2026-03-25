@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusChat — WhatsApp AI for Schools & Colleges</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,600,500,800&display=swap"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --green: #25d366;
+        --green-dark: #128c7e;
+        --green-light: #dcfce7;
+        --ink: #0a0f0d;
+        --fog: #f4f7f5;
+        --muted: #6b7c74;
+        --accent: #ff4f2b;
+        --white: #ffffff;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--fog);
+        color: var(--ink);
+        overflow-x: hidden;
+      }
+
+      /* NAV */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.2rem 5%;
+        background: rgba(244, 247, 245, 0.88);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(37, 211, 102, 0.15);
+      }
+      .logo {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .logo span {
+        color: var(--green-dark);
+        font-style: normal;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--ink);
+      }
+      .nav-cta {
+        background: var(--ink);
+        color: var(--white);
+        padding: 0.6rem 1.4rem;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.15s;
+      }
+      .nav-cta:hover {
+        background: var(--green-dark);
+        transform: translateY(-1px);
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 4rem;
+        padding: 8rem 5% 5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        right: -150px;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(37, 211, 102, 0.18) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        bottom: -80px;
+        left: -80px;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(
+          circle,
+          rgba(18, 140, 126, 0.1) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--green-light);
+        color: var(--green-dark);
+        padding: 0.4rem 1rem;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        margin-bottom: 1.5rem;
+        animation: fadeUp 0.6s ease both;
+      }
+      .hero-badge::before {
+        content: "●";
+        font-size: 0.5rem;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      h1 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: clamp(2.8rem, 5vw, 4.4rem);
+        font-weight: 600;
+        line-height: 1.05;
+        letter-spacing: -1px;
+        animation: fadeUp 0.7s 0.1s ease both;
+      }
+      h1 em {
+        color: var(--green-dark);
+      }
+
+      .hero-sub {
+        font-size: 1.1rem;
+        color: var(--muted);
+        font-weight: 300;
+        line-height: 1.7;
+        margin: 1.5rem 0 2.5rem;
+        max-width: 480px;
+        animation: fadeUp 0.7s 0.2s ease both;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        animation: fadeUp 0.7s 0.3s ease both;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: var(--green);
+        color: var(--white);
+        padding: 0.9rem 2rem;
+        border-radius: 100px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 24px rgba(37, 211, 102, 0.35);
+        transition: all 0.2s;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(37, 211, 102, 0.45);
+      }
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--ink);
+        font-size: 0.95rem;
+        font-weight: 500;
+        text-decoration: none;
+        border-bottom: 1.5px solid var(--ink);
+        padding-bottom: 1px;
+        transition: color 0.2s;
+      }
+      .btn-secondary:hover {
+        color: var(--green-dark);
+        border-color: var(--green-dark);
+      }
+
+      /* PHONE */
+      .hero-visual {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: fadeUp 0.8s 0.2s ease both;
+      }
+      .phone {
+        width: 330px;
+        background: #fff;
+        border-radius: 36px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12),
+          0 0 0 1px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+      }
+      .phone-header {
+        background: #075e54;
+        padding: 1rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .phone-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        color: #fff;
+        font-size: 1.1rem;
+      }
+      .phone-info {
+        flex: 1;
+      }
+      .phone-name {
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .phone-status {
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.75rem;
+      }
+      .phone-body {
+        background: #e5ddd5;
+        padding: 1rem;
+        min-height: 360px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .msg {
+        max-width: 85%;
+        padding: 0.6rem 0.9rem;
+        border-radius: 12px;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        animation: msgIn 0.4s ease both;
+      }
+      .msg-time {
+        font-size: 0.65rem;
+        opacity: 0.55;
+        text-align: right;
+        margin-top: 0.2rem;
+      }
+      .msg.user {
+        background: #dcf8c6;
+        margin-left: auto;
+        border-bottom-right-radius: 3px;
+        text-align: right;
+      }
+      .msg.bot {
+        background: #fff;
+        margin-right: auto;
+        border-bottom-left-radius: 3px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        text-align: left;
+      }
+      .msg:nth-child(1) {
+        animation-delay: 0.5s;
+      }
+      .msg:nth-child(2) {
+        animation-delay: 1s;
+      }
+      .msg:nth-child(3) {
+        animation-delay: 1.8s;
+      }
+      .msg:nth-child(4) {
+        animation-delay: 2.8s;
+      }
+      @keyframes msgIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .phone-input {
+        background: #f0f0f0;
+        padding: 0.7rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .phone-input-field {
+        flex: 1;
+        background: #fff;
+        border-radius: 24px;
+        padding: 0.45rem 1rem;
+        font-size: 0.78rem;
+        color: #999;
+        border: none;
+        outline: none;
+      }
+      .phone-send {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* LOGO STRIP */
+      .colleges-strip {
+        padding: 2.5rem 5%;
+        text-align: center;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        background: #fff;
+      }
+      .strip-label {
+        font-size: 0.8rem;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .college-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem 3rem;
+      }
+      .college-logo {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        color: #bbb;
+        font-size: 1rem;
+        transition: color 0.2s;
+      }
+      .college-logo:hover {
+        color: var(--muted);
+      }
+
+      /* SECTION COMMONS */
+      .section {
+        padding: 6rem 5%;
+      }
+      .section-label {
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--green-dark);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+      .section-title {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        font-weight: 600;
+        letter-spacing: -1px;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+      }
+      .section-sub {
+        color: var(--muted);
+        font-size: 1.05rem;
+        font-weight: 300;
+        line-height: 1.7;
+        max-width: 520px;
+      }
+
+      /* PROBLEM BAND */
+      .problem-band {
+        background: var(--ink);
+        color: #fff;
+        padding: 5rem 5%;
+        display: flex;
+        align-items: center;
+        gap: 5rem;
+        flex-wrap: wrap;
+      }
+      .problem-band-text {
+        flex: 1;
+        min-width: 260px;
+      }
+      .problem-band-text .section-label {
+        color: var(--green);
+      }
+      .problem-band-text .section-title {
+        color: #fff;
+        font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+      }
+      .problem-band-text p {
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 0.75rem;
+        font-size: 1rem;
+        line-height: 1.7;
+        font-weight: 300;
+        max-width: 380px;
+      }
+      .problem-pills {
+        flex: 1;
+        min-width: 260px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .pill {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        padding: 0.55rem 1.1rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.65);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .pill-no {
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 0.75rem;
+      }
+
+      /* STEPS */
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+      }
+      .step {
+        background: #fff;
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        transition: transform 0.25s, box-shadow 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .step:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+      }
+      .step::before {
+        content: attr(data-n);
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 5rem;
+        font-weight: 700;
+        position: absolute;
+        top: -1rem;
+        right: 1rem;
+        color: rgba(37, 211, 102, 0.08);
+        line-height: 1;
+      }
+      .step-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: var(--green-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+      }
+      .step h3 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .step p {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        font-weight: 300;
+      }
+
+      /* USE CASES */
+      .usecases {
+        background: #fff;
+      }
+      .usecase-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 4rem;
+      }
+      .usecase-card {
+        background: var(--fog);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: transform 0.25s, box-shadow 0.25s;
+      }
+      .usecase-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.07);
+      }
+      .usecase-tag {
+        display: inline-block;
+        background: var(--green-light);
+        color: var(--green-dark);
+        padding: 0.25rem 0.75rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .usecase-card h3 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+      }
+      .usecase-card p {
+        color: var(--muted);
+        font-size: 0.875rem;
+        line-height: 1.65;
+        font-weight: 300;
+      }
+      .usecase-example {
+        margin-top: 1.2rem;
+        background: #fff;
+        border-radius: 10px;
+        padding: 0.85rem 1rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+        border-left: 2px solid var(--green);
+        line-height: 1.5;
+      }
+
+      /* FEATURES */
+      .features-section {
+        background: var(--ink);
+        color: #fff;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-top: 4rem;
+      }
+      .feature-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 2rem;
+        transition: background 0.25s, border-color 0.25s;
+      }
+      .feature-card:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(37, 211, 102, 0.3);
+      }
+      .feature-card.wide {
+        grid-column: span 2;
+      }
+      .feature-icon {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+      }
+      .feature-card h3 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .feature-card p {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+        line-height: 1.65;
+        font-weight: 300;
+      }
+      .features-section .section-sub {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .features-section .section-label {
+        color: var(--green);
+      }
+      .features-section .section-title {
+        color: #fff;
+      }
+
+      /* STATS */
+      .stats-section {
+        background: var(--green);
+        color: #fff;
+        padding: 4rem 5%;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-num {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -2px;
+      }
+      .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-top: 0.4rem;
+        font-weight: 300;
+      }
+
+      /* COMPARISON */
+      .compare-section {
+        background: var(--fog);
+      }
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 3rem;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      }
+      .compare-table thead {
+        background: var(--ink);
+        color: #fff;
+      }
+      .compare-table thead th {
+        padding: 1.2rem 1.5rem;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+      .compare-table thead th:first-child {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1rem;
+      }
+      .compare-table thead th.hl {
+        background: var(--green-dark);
+      }
+      .compare-table tbody tr {
+        border-bottom: 1px solid #f0f0f0;
+        background: #fff;
+      }
+      .compare-table tbody tr:last-child {
+        border-bottom: none;
+      }
+      .compare-table tbody tr:hover {
+        background: var(--fog);
+      }
+      .compare-table td {
+        padding: 1rem 1.5rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+      .compare-table td:first-child {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .compare-table td.hl {
+        background: rgba(37, 211, 102, 0.04);
+        color: var(--ink);
+      }
+      .chk {
+        color: var(--green-dark);
+        font-weight: 700;
+      }
+      .crs {
+        color: #ccc;
+      }
+
+      /* ADMIN */
+      .admin-section {
+        padding: 6rem 5%;
+        background: #fff;
+      }
+      .admin-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: center;
+        margin-top: 4rem;
+      }
+      .admin-mockup {
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
+          0 0 0 1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+      }
+      .admin-topbar {
+        background: #f8f9fa;
+        padding: 0.9rem 1.2rem;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .d1 {
+        background: #ff5f57;
+      }
+      .d2 {
+        background: #febc2e;
+      }
+      .d3 {
+        background: #28c840;
+      }
+      .admin-sidebar {
+        width: 160px;
+        background: #fafafa;
+        border-right: 1px solid #eee;
+        padding: 1rem;
+        float: left;
+        min-height: 300px;
+      }
+      .admin-nav-item {
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        color: var(--muted);
+        cursor: pointer;
+        margin-bottom: 0.2rem;
+        transition: background 0.2s;
+      }
+      .admin-nav-item.active {
+        background: var(--green-light);
+        color: var(--green-dark);
+        font-weight: 600;
+      }
+      .admin-content {
+        padding: 1.2rem;
+        overflow: hidden;
+      }
+      .admin-content h4 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      .input-row {
+        margin-bottom: 0.75rem;
+      }
+      .input-label {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-bottom: 0.25rem;
+      }
+      .fake-input {
+        background: #f4f7f5;
+        border: 1.5px solid #e5ebe8;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.78rem;
+        color: #aaa;
+      }
+      .fake-btn {
+        display: inline-block;
+        background: var(--green);
+        color: #fff;
+        padding: 0.45rem 1rem;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+      .file-list {
+        margin-top: 0.75rem;
+      }
+      .file-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        background: #f9f9f9;
+        margin-bottom: 0.3rem;
+        border: 1px solid #eee;
+      }
+      .file-ext {
+        color: #fff;
+        border-radius: 4px;
+        padding: 0.15rem 0.35rem;
+        font-size: 0.6rem;
+        font-weight: 700;
+      }
+      .file-ext.pdf {
+        background: #ff4f2b;
+      }
+      .file-ext.doc {
+        background: #2563eb;
+      }
+      .cf::after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      .admin-features h3 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1.9rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+      }
+      .admin-features p {
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.7;
+        font-weight: 300;
+        margin-bottom: 2rem;
+      }
+      .check-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .check-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        font-size: 0.95rem;
+      }
+      .check-list li::before {
+        content: "✓";
+        width: 24px;
+        height: 24px;
+        background: var(--green-light);
+        color: var(--green-dark);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      /* INTEGRATIONS */
+      .integrations-section {
+        background: var(--fog);
+      }
+      .integrations-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-top: 4rem;
+      }
+      .integration-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.75rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        text-align: center;
+        transition: transform 0.25s, box-shadow 0.25s;
+      }
+      .integration-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.07);
+      }
+      .integration-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.75rem;
+      }
+      .integration-card h4 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+      }
+      .integration-card p {
+        font-size: 0.82rem;
+        color: var(--muted);
+        font-weight: 300;
+        line-height: 1.5;
+      }
+
+      /* PRICING */
+      .pricing-section {
+        background: var(--fog);
+      }
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 4rem;
+        align-items: start;
+      }
+      .pricing-card {
+        background: #fff;
+        border-radius: 24px;
+        padding: 2.5rem 2rem;
+        border: 1.5px solid rgba(0, 0, 0, 0.06);
+        transition: transform 0.25s, box-shadow 0.25s;
+        position: relative;
+      }
+      .pricing-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+      }
+      .pricing-card.popular {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--green);
+        transform: scale(1.03);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      }
+      .pricing-card.popular:hover {
+        transform: scale(1.03) translateY(-4px);
+      }
+      .popular-badge {
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--green);
+        color: #fff;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.3rem 0.9rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .plan-name {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+      }
+      .pricing-card.popular .plan-name {
+        color: #fff;
+      }
+      .plan-desc {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 1.75rem;
+        font-weight: 300;
+      }
+      .pricing-card.popular .plan-desc {
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .plan-price {
+        margin-bottom: 1.75rem;
+      }
+      .plan-price .amount {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -1px;
+      }
+      .pricing-card.popular .amount {
+        color: #fff;
+      }
+      .plan-price .period {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-left: 0.3rem;
+      }
+      .pricing-card.popular .period {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .plan-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        margin-bottom: 2rem;
+      }
+      .plan-features li {
+        font-size: 0.875rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.6rem;
+      }
+      .plan-features li::before {
+        content: "✓";
+        color: var(--green-dark);
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .pricing-card.popular .plan-features li {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .pricing-card.popular .plan-features li::before {
+        color: var(--green);
+      }
+      .plan-cta {
+        display: block;
+        text-align: center;
+        padding: 0.85rem;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        background: var(--fog);
+        color: var(--ink);
+      }
+      .plan-cta:hover {
+        background: var(--green-light);
+      }
+      .pricing-card.popular .plan-cta {
+        background: var(--green);
+        color: #fff;
+      }
+      .pricing-card.popular .plan-cta:hover {
+        background: #20bb58;
+      }
+
+      /* TESTIMONIALS */
+      .testimonials {
+        background: #fff;
+        padding: 6rem 5%;
+      }
+      .testi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 3rem;
+      }
+      .testi-card {
+        background: var(--fog);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: transform 0.25s;
+      }
+      .testi-card:hover {
+        transform: translateY(-3px);
+      }
+      .testi-stars {
+        color: var(--green);
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+        letter-spacing: 2px;
+      }
+      .testi-quote {
+        font-size: 0.95rem;
+        color: var(--ink);
+        line-height: 1.7;
+        font-weight: 300;
+        margin-bottom: 1.5rem;
+      }
+      .testi-author {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .testi-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #fff;
+      }
+      .testi-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .testi-role {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      /* FAQ */
+      .faq-section {
+        background: var(--fog);
+      }
+      .faq-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 4rem;
+      }
+      .faq-item {
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .faq-item:hover {
+        border-color: rgba(37, 211, 102, 0.3);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .faq-q {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+        line-height: 1.4;
+      }
+      .faq-a {
+        font-size: 0.875rem;
+        color: var(--muted);
+        line-height: 1.65;
+        font-weight: 300;
+      }
+
+      /* CTA */
+      .cta-section {
+        padding: 7rem 5%;
+        text-align: center;
+        background: linear-gradient(135deg, #0a2e1a 0%, #075e54 100%);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-section::before {
+        content: "";
+        position: absolute;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(
+          circle,
+          rgba(37, 211, 102, 0.15) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+      }
+      .cta-section h2 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4.2rem);
+        font-weight: 600;
+        letter-spacing: -1px;
+        margin-bottom: 1.2rem;
+        position: relative;
+        line-height: 1.1;
+      }
+      .cta-section h2 em {
+        color: var(--green);
+      }
+      .cta-section p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.1rem;
+        max-width: 500px;
+        margin: 0 auto 2.5rem;
+        position: relative;
+      }
+      .cta-btns {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        position: relative;
+      }
+      .cta-trust {
+        margin-top: 2rem;
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 0.82rem;
+        position: relative;
+      }
+      .btn-white {
+        background: #fff;
+        color: var(--ink);
+        padding: 1rem 2.2rem;
+        border-radius: 100px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .btn-white:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      }
+      .btn-outline {
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        padding: 1rem 2.2rem;
+        border-radius: 100px;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .btn-outline:hover {
+        border-color: #fff;
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.5);
+        padding: 4rem 5% 2.5rem;
+      }
+      .footer-top {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 3rem;
+        padding-bottom: 3rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .footer-logo {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 0.75rem;
+      }
+      .footer-logo span {
+        color: var(--green);
+        font-style: normal;
+      }
+      .footer-tagline {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-weight: 300;
+        line-height: 1.6;
+      }
+      .footer-col h5 {
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      .footer-col a {
+        display: block;
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: none;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        transition: color 0.2s;
+      }
+      .footer-col a:hover {
+        color: #fff;
+      }
+      .footer-bottom {
+        padding-top: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-size: 0.8rem;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 1000px) {
+        .pricing-grid {
+          grid-template-columns: 1fr;
+        }
+        .pricing-card.popular {
+          transform: scale(1);
+        }
+        .integrations-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .footer-top {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .hero-sub {
+          margin: 1.5rem auto 2.5rem;
+        }
+        .hero-actions {
+          justify-content: center;
+        }
+        .hero-visual {
+          order: -1;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .feature-card.wide {
+          grid-column: span 1;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .admin-grid {
+          grid-template-columns: 1fr;
+        }
+        .testi-grid {
+          grid-template-columns: 1fr;
+        }
+        .usecase-grid {
+          grid-template-columns: 1fr;
+        }
+        .faq-grid {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+        .problem-band {
+          flex-direction: column;
+          gap: 2rem;
+        }
+        .integrations-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 580px) {
+        /* NAV */
+        nav {
+          padding: 1rem 4%;
+        }
+        .logo {
+          font-size: 1.25rem;
+        }
+        .nav-cta {
+          padding: 0.5rem 1rem;
+          font-size: 0.8rem;
+        }
+
+        /* HERO */
+        .hero {
+          padding: 6rem 4% 3rem;
+          gap: 2rem;
+          min-height: auto;
+        }
+        h1 {
+          font-size: clamp(2rem, 8vw, 2.8rem);
+          letter-spacing: -0.5px;
+        }
+        .hero-sub {
+          font-size: 0.95rem;
+        }
+        .hero-badge {
+          font-size: 0.72rem;
+          padding: 0.35rem 0.8rem;
+        }
+        .btn-primary {
+          padding: 0.8rem 1.5rem;
+          font-size: 0.9rem;
+        }
+        .btn-secondary {
+          font-size: 0.85rem;
+        }
+
+        /* PHONE */
+        .phone {
+          width: 330px;
+          /* margin: 0 1rem; */
+        }
+        .phone-body {
+          min-height: 280px;
+        }
+
+        /* SECTIONS */
+        .section {
+          padding: 3.5rem 4%;
+        }
+        .section-title {
+          font-size: clamp(1.6rem, 6vw, 2rem);
+        }
+        .section-sub {
+          font-size: 0.95rem;
+        }
+
+        /* COLLEGES STRIP */
+        .colleges-strip {
+          padding: 1.5rem 4%;
+        }
+        .college-logos {
+          gap: 1rem 1.5rem;
+        }
+        .college-logo {
+          font-size: 0.85rem;
+        }
+
+        /* PROBLEM BAND */
+        .problem-band {
+          padding: 3rem 4%;
+        }
+        .problem-band-text .section-title {
+          font-size: clamp(1.5rem, 5vw, 2rem);
+        }
+
+        /* STEPS */
+        .steps {
+          gap: 1rem;
+          margin-top: 2.5rem;
+        }
+        .step {
+          padding: 1.5rem;
+        }
+        .step::before {
+          font-size: 3.5rem;
+        }
+
+        /* USE CASES */
+        .usecase-grid {
+          gap: 1rem;
+          margin-top: 2.5rem;
+        }
+        .usecase-card {
+          padding: 1.5rem;
+        }
+
+        /* FEATURES */
+        .features-section {
+          padding: 3.5rem 4%;
+        }
+        .features-grid {
+          margin-top: 2.5rem;
+          gap: 1rem;
+        }
+        .feature-card {
+          padding: 1.5rem;
+        }
+
+        /* STATS */
+        .stats-section {
+          padding: 3rem 4%;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+        }
+        .stat-num {
+          font-size: 2.5rem;
+        }
+
+        /* COMPARE TABLE */
+        .compare-table {
+          font-size: 0.75rem;
+          display: block;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .compare-table td,
+        .compare-table th {
+          padding: 0.6rem 0.5rem;
+          white-space: nowrap;
+        }
+
+        /* ADMIN */
+        .admin-section {
+          padding: 3.5rem 4%;
+        }
+        .admin-grid {
+          gap: 2.5rem;
+          margin-top: 2.5rem;
+        }
+        .admin-sidebar {
+          width: 120px;
+          min-height: 240px;
+          padding: 0.75rem;
+        }
+        .admin-nav-item {
+          font-size: 0.7rem;
+          padding: 0.4rem 0.5rem;
+        }
+        .admin-features h3 {
+          font-size: 1.4rem;
+        }
+
+        /* INTEGRATIONS */
+        .integrations-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-top: 2.5rem;
+        }
+        .integration-card {
+          padding: 1.25rem;
+        }
+
+        /* PRICING */
+        .pricing-section {
+          padding: 3.5rem 4%;
+        }
+        .pricing-card {
+          padding: 2rem 1.5rem;
+        }
+        .pricing-card.popular {
+          transform: none;
+        }
+        .pricing-card.popular:hover {
+          transform: translateY(-4px);
+        }
+
+        /* TESTIMONIALS */
+        .testimonials {
+          padding: 3.5rem 4%;
+        }
+        .testi-grid {
+          margin-top: 2rem;
+          gap: 1rem;
+        }
+        .testi-card {
+          padding: 1.5rem;
+        }
+
+        /* FAQ */
+        .faq-grid {
+          gap: 0.75rem;
+          margin-top: 2.5rem;
+        }
+        .faq-item {
+          padding: 1.25rem 1.5rem;
+        }
+        .faq-q {
+          font-size: 0.9rem;
+        }
+
+        /* CTA */
+        .cta-section {
+          padding: 4rem 4%;
+        }
+        .cta-section h2 {
+          font-size: clamp(1.8rem, 7vw, 2.5rem);
+        }
+        .cta-section p {
+          font-size: 0.95rem;
+        }
+        .btn-white,
+        .btn-outline {
+          padding: 0.85rem 1.6rem;
+          font-size: 0.9rem;
+        }
+
+        /* FOOTER */
+        .footer-top {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+          gap: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a href="#" class="logo" style="text-decoration: none">Campus<span>Chat</span></a>
+      <ul class="nav-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <a href="https://wa.me/917092186598?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20CampusChat%20for%20my%20institution." target="_blank" class="nav-cta">Get Started →</a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">WhatsApp AI · Live in Minutes</div>
+        <h1>
+          Your institution,<br /><em style="font-style: normal">always on</em
+          ><br />WhatsApp.
+        </h1>
+        <p class="hero-sub">
+          An AI chatbot trained on your institution's content that answers every
+          query — admissions, fees, deadlines, campus info —
+          instantly, 24/7, in natural conversation.
+        </p>
+        <div class="hero-actions">
+          <a href="https://wa.me/917092186598?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20CampusChat%20for%20my%20institution." target="_blank" class="btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"
+              />
+              <path
+                d="M12 0C5.373 0 0 5.373 0 12c0 2.021.5 3.923 1.381 5.591L0 24l6.545-1.369A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.887 0-3.65-.51-5.17-1.4l-.37-.22-3.884.813.828-3.793-.24-.39A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"
+              />
+            </svg>
+            Book a Demo
+          </a>
+          <a href="#how" class="btn-secondary">See how it works →</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone">
+          <div class="phone-header">
+            <div class="phone-avatar">D</div>
+            <div class="phone-info">
+              <div class="phone-name">Delhi Public School</div>
+              <div class="phone-status">online</div>
+            </div>
+          </div>
+          <div class="phone-body">
+            <div class="msg user">
+              Hi! What's the admission process for Class 11?
+              <div class="msg-time">10:14 AM ✓✓</div>
+            </div>
+            <div class="msg bot">
+              For Class 11 admissions, you need to fill the online form and
+              submit your Class 10 marksheet. The last date is
+              <strong>March 31, 2025</strong>. Need the application link? 😊
+              <div class="msg-time">10:14 AM</div>
+            </div>
+            <div class="msg user">
+              Yes please! Also what's the annual fee?
+              <div class="msg-time">10:15 AM ✓✓</div>
+            </div>
+            <div class="msg bot">
+              Sure! Here's the link: <span style="white-space: nowrap"><strong>dps.edu/apply</strong> 🔗</span><br /><br />The annual fee for
+              Class 11 is <strong>₹1,20,000</strong>. Sibling discount and
+              merit scholarships are available. Want the fee structure PDF?
+              <div class="msg-time">10:15 AM</div>
+            </div>
+          </div>
+          <div class="phone-input">
+            <div class="phone-input-field">Type a message...</div>
+            <div class="phone-send">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLLEGES STRIP -->
+    <!-- <div class="colleges-strip">
+      <div class="strip-label">Trusted by schools & colleges across India</div>
+      <div class="college-logos">
+        <div class="college-logo">Delhi Public School</div>
+        <div class="college-logo">Ryan International</div>
+        <div class="college-logo">St. Xavier's</div>
+        <div class="college-logo">Symbiosis Institute</div>
+        <div class="college-logo">Christ University</div>
+        <div class="college-logo">Amity University</div>
+        <div class="college-logo">BITS Pilani</div>
+      </div>
+    </div> -->
+
+    <!-- PROBLEM BAND -->
+    <div class="problem-band">
+      <div class="problem-band-text">
+        <div class="section-label">The Problem</div>
+        <div class="section-title">
+          Your admin team<br />shouldn't be a helpdesk.
+        </div>
+        <p>
+          Hundreds of repetitive WhatsApp messages every single day. Your team is spending hours on
+          things an AI could answer in seconds.
+        </p>
+      </div>
+      <div class="problem-pills">
+        <div class="pill">
+          <span class="pill-no">✗</span> "What's the fee structure?"
+        </div>
+        <div class="pill">
+          <span class="pill-no">✗</span> "When is the last date?"
+        </div>
+        <div class="pill">
+          <span class="pill-no">✗</span> "Which courses do you offer?"
+        </div>
+        <div class="pill"><span class="pill-no">✗</span> "How do I apply?"</div>
+        <div class="pill">
+          <span class="pill-no">✗</span> "Is hostel available?"
+        </div>
+        <div class="pill">
+          <span class="pill-no">✗</span> "What are the eligibility criteria?"
+        </div>
+        <div class="pill">
+          <span class="pill-no">✗</span> "Can I get the prospectus?"
+        </div>
+        <div class="pill">
+          <span class="pill-no">✗</span> "Are scholarships available?"
+        </div>
+        <div class="pill">
+          <span class="pill-no">✗</span> "What's the placement record?"
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+      <div class="section-label">The Flow</div>
+      <div class="section-title">Up and running<br />in minutes.</div>
+      <p class="section-sub">
+        No developers needed. Your team handles setup through a simple dashboard
+        — and students start getting answers immediately.
+      </p>
+      <div class="steps">
+        <div class="step" data-n="1">
+          <div class="step-icon">🌐</div>
+          <h3>Connect your website</h3>
+          <p>
+            Paste your institution's URL and we crawl your entire site — every page,
+            every section — to build an instant, searchable knowledge base from
+            your official content.
+          </p>
+        </div>
+        <div class="step" data-n="2">
+          <div class="step-icon">📄</div>
+          <h3>Upload your documents</h3>
+          <p>
+            Add brochures, fee structures, syllabi, faculty profiles, hostel
+            guides, or scholarship forms. The AI reads and learns from every
+            document you share.
+          </p>
+        </div>
+        <div class="step" data-n="3">
+          <div class="step-icon">📱</div>
+          <h3>Connect WhatsApp</h3>
+          <p>
+            Link your institution's existing WhatsApp number via Meta's Cloud API.
+            We walk you through every step — it takes under 10 minutes and
+            requires zero technical knowledge.
+          </p>
+        </div>
+        <div class="step" data-n="4">
+          <div class="step-icon">🚀</div>
+          <h3>Go live</h3>
+          <p>
+            Students message your WhatsApp number like they always have — and
+            now get instant, accurate answers. Your team focuses only on
+            conversations that genuinely need a human.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- USE CASES -->
+    <section class="section usecases" id="usecases">
+      <div class="section-label">What Students Ask</div>
+      <div class="section-title">
+        Handles every question<br />your inbox is drowning in.
+      </div>
+      <p class="section-sub">
+        CampusChat is trained on your specific content — so answers are
+        always accurate, up-to-date, and grounded in what you've officially
+        shared.
+      </p>
+      <div class="usecase-grid">
+        <div class="usecase-card">
+          <div class="usecase-tag">Admissions</div>
+          <h3>Deadlines & application process</h3>
+          <p>
+            Cutoff dates, eligibility criteria, how to apply, entrance exams
+            accepted, documents required — answered instantly, directly from
+            your admissions page.
+          </p>
+          <div class="usecase-example">
+            "What documents do I need for admission?" → Instant accurate
+            list pulled from your admissions page.
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-tag">Fees & Finance</div>
+          <h3>Fee structures & scholarships</h3>
+          <p>
+            Semester fees, hostel charges, merit scholarships, payment plans —
+            students get exact figures from your official fee documents, not
+            estimates.
+          </p>
+          <div class="usecase-example">
+            "Is there a scholarship for students with 90%+ in boards?" → Pulled
+            directly from your scholarship policy PDF.
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-tag">Courses</div>
+          <h3>Programs & curriculum details</h3>
+          <p>
+            Subjects taught, electives available, specializations, semester
+            structure, credit requirements — answered from your uploaded
+            syllabus documents.
+          </p>
+          <div class="usecase-example">
+            "Does MBA have a Marketing specialization?" → Yes or no with full
+            details, from your brochure.
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-tag">Campus Life</div>
+          <h3>Hostel, clubs & facilities</h3>
+          <p>
+            Hostel availability, mess timings, sports facilities, cultural
+            clubs, Wi-Fi access, library hours — everything students want to
+            know before they decide to join.
+          </p>
+          <div class="usecase-example">
+            "Is the hostel co-ed or separate?" → Answered from your hostel guide
+            PDF within seconds.
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-tag">Placements & Results</div>
+          <h3>Results, placements & achievements</h3>
+          <p>
+            Board exam results, placement records, top recruiters, internship
+            opportunities — real data from your reports, brochures, and annual
+            publications.
+          </p>
+          <div class="usecase-example">
+            "What was the Class 12 board result last year?" → Exact figures from
+            your results PDF.
+          </div>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-tag">Downloads</div>
+          <h3>Forms & documents on demand</h3>
+          <p>
+            When students ask for the admission form, scholarship form, or
+            prospectus — the chatbot shares the download link right in
+            the WhatsApp chat. Instantly.
+          </p>
+          <div class="usecase-example">
+            "Can you send me the admission form?" → Download link shared in the
+            chat within 3 seconds.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section features-section" id="features">
+      <div class="section-label">Under the Hood</div>
+      <div class="section-title">
+        Built to get things right,<br />every single time.
+      </div>
+      <p class="section-sub">
+        Powered by a RAG pipeline that retrieves from your content before
+        generating — so answers are always grounded in what you've approved,
+        never invented.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>RAG-powered accuracy</h3>
+          <p>
+            Every answer is retrieved from your official content first, then
+            composed by the LLM. No hallucinations, no guessing, no generic
+            internet answers — only what you've shared.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>Natural conversation</h3>
+          <p>
+            No menu trees, no button flows, no numbered options. Students type
+            naturally and get conversational answers — just like texting a
+            knowledgeable friend from the front office.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📎</div>
+          <h3>Instant file delivery</h3>
+          <p>
+            Upload admission forms, scholarship applications, or your full
+            prospectus. When a student asks, the chatbot sends the download link
+            right in the WhatsApp chat automatically.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🕐</div>
+          <h3>Truly 24/7</h3>
+          <p>
+            Students ask at midnight before deadlines, on weekends, during
+            holidays. CampusChat never sleeps, never takes a break, and never
+            keeps anyone waiting for office hours.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>Multilingual by default</h3>
+          <p>
+            Students message in Hindi, Tamil, Telugu, Bengali, or any other
+            language — and CampusChat responds in the same language. No
+            configuration required. It just works.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Always current</h3>
+          <p>
+            Update a document, re-crawl your website, and the chatbot's
+            knowledge updates instantly. No delays, no retraining, no support
+            ticket. Changes reflect in real time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-num">97%</div>
+          <div class="stat-label">Query resolution rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">&lt;10s</div>
+          <div class="stat-label">Average response time</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">Always available</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">10m</div>
+          <div class="stat-label">Time to go live</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARISON TABLE -->
+    <section class="section compare-section">
+      <div class="section-label">Why CampusChat</div>
+      <div class="section-title">
+        Better than the alternatives.<br />By a long way.
+      </div>
+      <p class="section-sub">
+        See how CampusChat stacks up against the way most institutions still handle
+        student queries today.
+      </p>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th class="hl">CampusChat</th>
+            <th>Human team</th>
+            <th>Generic chatbot</th>
+            <th>No chatbot</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Responds instantly, 24/7</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+          </tr>
+          <tr>
+            <td>Trained on your specific content</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="crs">✗</span></td>
+          </tr>
+          <tr>
+            <td>Conversational — no button menus</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="crs">✗</span></td>
+          </tr>
+          <tr>
+            <td>Shares files & download links</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="crs">✗</span></td>
+          </tr>
+          <tr>
+            <td>Scales to thousands of students</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+          </tr>
+          <tr>
+            <td>Multilingual support</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="crs">✗</span></td>
+          </tr>
+          <tr>
+            <td>No technical setup required</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="chk">✓</span></td>
+          </tr>
+          <tr>
+            <td>Cost-effective at scale</td>
+            <td class="hl"><span class="chk">✓</span></td>
+            <td><span class="crs">✗</span></td>
+            <td><span class="chk">✓</span></td>
+            <td><span class="chk">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ADMIN SECTION -->
+    <section class="admin-section" id="admin">
+      <div class="section-label">The Dashboard</div>
+      <div class="admin-grid">
+        <div class="admin-mockup cf">
+          <div class="admin-topbar">
+            <div class="dot d1"></div>
+            <div class="dot d2"></div>
+            <div class="dot d3"></div>
+            <span style="margin-left: 0.5rem; font-size: 0.78rem; color: #999"
+              >CampusChat Dashboard</span
+            >
+          </div>
+          <div style="display: flex">
+            <div class="admin-sidebar">
+              <div class="admin-nav-item active">🌐 Website</div>
+              <div class="admin-nav-item">📄 Documents</div>
+              <div class="admin-nav-item">📎 Downloads</div>
+              <div class="admin-nav-item">💬 Conversations</div>
+              <div class="admin-nav-item">📊 Analytics</div>
+              <div class="admin-nav-item">⚙️ Settings</div>
+            </div>
+            <div class="admin-content" style="flex: 1">
+              <h4>Website Knowledge Base</h4>
+              <div class="input-row">
+                <div class="input-label">Institution Website URL</div>
+                <div class="fake-input">https://www.yourschool.edu.in</div>
+              </div>
+              <div class="input-row">
+                <div class="input-label">Status</div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.4rem;
+                    font-size: 0.78rem;
+                  "
+                >
+                  <span style="color: #25d366; font-size: 0.6rem">●</span>
+                  <span style="color: #25d366; font-weight: 600"
+                    >Crawled · 248 pages indexed</span
+                  >
+                </div>
+              </div>
+              <div class="fake-btn">Re-crawl Website</div>
+              <div style="margin-top: 1.2rem">
+                <div class="input-label">Uploaded Documents (4)</div>
+                <div class="file-list">
+                  <div class="file-item">
+                    <span class="file-ext pdf">PDF</span> Fee_Structure_2025.pdf
+                  </div>
+                  <div class="file-item">
+                    <span class="file-ext pdf">PDF</span> BBA_Syllabus.pdf
+                  </div>
+                  <div class="file-item">
+                    <span class="file-ext doc">DOC</span> Faculty_Directory.docx
+                  </div>
+                  <div class="file-item">
+                    <span class="file-ext pdf">PDF</span> Hostel_Guide.pdf
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-features">
+          <div class="section-label">Zero Complexity</div>
+          <h3>A dashboard built for admin teams, not developers.</h3>
+          <p>
+            Everything your institution needs to set up, manage, and update the
+            chatbot lives in one clean interface. No IT tickets, no technical
+            training, no ongoing maintenance required.
+          </p>
+          <ul class="check-list">
+            <li>Paste your URL and crawl your full site with one click</li>
+            <li>Drag and drop documents — PDFs, Word docs, spreadsheets</li>
+            <li>
+              Upload downloadable files students can request over WhatsApp
+            </li>
+            <li>Browse every student conversation in full detail</li>
+            <li>
+              See analytics — most-asked questions, peak hours, resolution rates
+            </li>
+            <li>Update content any time — changes reflect instantly</li>
+            <li>Invite team members and assign admin access roles</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTEGRATIONS -->
+    <section class="section integrations-section">
+      <div class="section-label">Works With</div>
+      <div class="section-title">
+        Plugs into the tools<br />you already use.
+      </div>
+      <p class="section-sub">
+        CampusChat is built on industry-standard infrastructure and integrates
+        with the platforms your institution already runs on.
+      </p>
+      <div class="integrations-grid">
+        <div class="integration-card">
+          <div class="integration-icon">📱</div>
+          <h4>WhatsApp Business API</h4>
+          <p>
+            Powered by Meta's official Cloud API. Works with your existing
+            number — no new number needed.
+          </p>
+        </div>
+        <div class="integration-card">
+          <div class="integration-icon">📄</div>
+          <h4>Any document format</h4>
+          <p>
+            Upload PDFs, Word docs, Excel sheets, PowerPoints — the AI extracts
+            and learns from all of them.
+          </p>
+        </div>
+        <div class="integration-card">
+          <div class="integration-icon">🌐</div>
+          <h4>Any website platform</h4>
+          <p>
+            WordPress, custom CMS, static HTML — we crawl and index any publicly
+            accessible website.
+          </p>
+        </div>
+        <div class="integration-card">
+          <div class="integration-icon">🔗</div>
+          <h4>CRM & ERP (Enterprise)</h4>
+          <p>
+            Enterprise plans support custom integrations with your existing CRM,
+            ERP, or student information systems.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section pricing-section" id="pricing">
+      <div class="section-label">Pricing</div>
+      <div class="section-title">
+        Tailored to your institution.<br />Priced accordingly.
+      </div>
+      <p class="section-sub">
+        Every institution is different — in size, volume, and needs. We'd rather
+        give you a plan that fits than a box that doesn't. Reach out and we'll
+        get back within 24 hours.
+      </p>
+      <div style="margin-top: 4rem; display: flex; justify-content: center">
+        <div
+          class="pricing-card popular"
+          style="
+            max-width: 520px;
+            width: 100%;
+            transform: none;
+            text-align: left;
+          "
+        >
+          <div class="plan-name" style="font-size: 1.5rem">Custom Pricing</div>
+          <div class="plan-desc">For any institution, any size</div>
+          <ul class="plan-features" style="margin-bottom: 2rem">
+            <li>Full website crawl &amp; unlimited document uploads</li>
+            <li>Unlimited student conversations</li>
+            <li>Downloadable file delivery over WhatsApp</li>
+            <li>Admin dashboard with analytics &amp; conversation logs</li>
+            <li>Multilingual support out of the box</li>
+            <li>Dedicated onboarding &amp; support</li>
+            <li>Optional CRM / ERP integrations</li>
+          </ul>
+          <a href="https://wa.me/917092186598?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20CampusChat%20for%20my%20institution." target="_blank" class="plan-cta" style="font-size: 1rem; padding: 1rem"
+            >Contact Us for Pricing →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <!-- <section class="testimonials">
+      <div class="section-label">What Institutions Say</div>
+      <div class="section-title">
+        Built for people who've seen<br />enough chatbot disappointments.
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">
+            "We used to get 200+ WhatsApp messages a day during admissions
+            season. Now the bot handles 95% of them. Our team can finally focus
+            on actual student counselling."
+          </p>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background: #075e54">P</div>
+            <div>
+              <div class="testi-name">Priya Nair</div>
+              <div class="testi-role">Admissions Head, Symbiosis Pune</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">
+            "Setup took literally 8 minutes. I uploaded our fee structure PDF
+            and the bot was answering fee questions correctly that same evening.
+            I was genuinely surprised."
+          </p>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background: #ff4f2b">R</div>
+            <div>
+              <div class="testi-name">Rohan Mehta</div>
+              <div class="testi-role">IT Coordinator, Amity Noida</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">
+            "Students love it because it feels like texting a friend, not
+            filling out a form. We've seen a measurable uptick in completed
+            applications since going live."
+          </p>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background: #2563eb">A</div>
+            <div>
+              <div class="testi-name">Ananya Krishnan</div>
+              <div class="testi-role">Dean of Students, Christ University</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- FAQ -->
+    <section class="section faq-section" id="faq">
+      <div class="section-label">Questions</div>
+      <div class="section-title">
+        Everything you're<br />probably wondering.
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <div class="faq-q">
+            Do we need a developer or IT team to set this up?
+          </div>
+          <div class="faq-a">
+            Not at all. CampusChat is designed specifically for non-technical
+            teams. You paste your URL, upload documents, and follow our setup
+            wizard. No code, no APIs, no IT support required on your end.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            What happens if the bot doesn't know the answer?
+          </div>
+          <div class="faq-a">
+            If a question falls outside your content, the bot politely says so
+            and suggests the student contact your team directly. It never makes
+            up answers or guesses — every response is grounded in what you've
+            uploaded.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            Can we use our existing WhatsApp number?
+          </div>
+          <div class="faq-a">
+            Yes — we connect to your existing number via the WhatsApp Business
+            API. Students keep messaging the same number they already know. The
+            only thing that changes is it now replies instantly, 24/7.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            How does the chatbot stay updated when we change content?
+          </div>
+          <div class="faq-a">
+            Just re-upload a document or hit "Re-crawl" on your dashboard. The
+            knowledge base updates immediately — no delay, no manual retraining,
+            no support ticket needed.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Is student conversation data stored securely?</div>
+          <div class="faq-a">
+            Yes. All conversations are encrypted, stored on secure servers, and
+            never shared with third parties. You retain full ownership of your
+            data. We comply with applicable data protection regulations.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            Can a human take over a conversation if needed?
+          </div>
+          <div class="faq-a">
+            Yes. You can monitor live conversations from the dashboard and step
+            in at any point. The bot can also be configured to escalate specific
+            query types to a human agent automatically.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Does it work in regional languages?</div>
+          <div class="faq-a">
+            Yes. The underlying LLM supports Hindi, Tamil, Telugu, Bengali,
+            Marathi, and many other languages. If a student messages in Hindi,
+            the bot responds in Hindi — naturally, without any configuration.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What's included in the onboarding?</div>
+          <div class="faq-a">
+            Every paid plan includes a guided onboarding session where we help
+            you crawl your site, upload key documents, and test the bot before
+            going live. Growth and Enterprise plans include a dedicated
+            onboarding call.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="cta">
+      <h2>
+        Your students are already<br />on
+        <em style="font-style: normal">WhatsApp.</em>
+      </h2>
+      <p>
+        Meet them where they are. Launch your AI-powered chatbot in
+        under 10 minutes — no developers needed.
+      </p>
+      <div class="cta-btns">
+        <a href="https://wa.me/917092186598?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20CampusChat%20for%20my%20institution." target="_blank" class="btn-white">Book a Free Demo</a>
+        <a href="https://wa.me/917092186598?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20CampusChat%20for%20my%20institution." target="_blank" class="btn-outline">Talk to Sales</a>
+      </div>
+      <div class="cta-trust">
+        No credit card required &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; Live
+        in 10 minutes
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo">Campus<span>Chat</span></div>
+          <div class="footer-tagline">
+            WhatsApp AI for schools & colleges. Answer every student question instantly,
+            24/7, from your own content. No developers needed.
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Product</h5>
+          <a href="#">Features</a>
+          <a href="#">How it works</a>
+          <a href="#">Pricing</a>
+          <a href="#">Changelog</a>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Data Security</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2025 CampusChat. All rights reserved.</div>
+        <div>Made in India 🇮🇳</div>
+      </div>
+    </footer>
+  </body>
+</html>
